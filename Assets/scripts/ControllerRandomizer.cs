@@ -126,10 +126,19 @@ public class ControllerRandomizer : MonoBehaviour {
 
 			if (i == 0) {
 				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+
+				if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
+					vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+					
 				nextKeys.up = vertical.positive;
 				nextKeys.down = vertical.negative;
 			} else {
 				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+
+				if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
+					horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+				
+
 				nextKeys.left = horizontal.negative;
 				nextKeys.right = horizontal.positive;
 			}
@@ -139,6 +148,14 @@ public class ControllerRandomizer : MonoBehaviour {
 
 			vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
 			horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+
+
+			if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
+				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+
+			if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
+				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+			
 
 			nextKeys.up = vertical.positive;
 			nextKeys.down = vertical.negative;
@@ -157,8 +174,6 @@ public class ControllerRandomizer : MonoBehaviour {
 		player.left = left;
 		player.right = right;
 	}
-
-
 
 	public void SetBundles() {
 		WalkBundle bundle;

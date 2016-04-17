@@ -31,7 +31,8 @@ public class Metamorphosis : MonoBehaviour {
 	}
 
 	public void Shapeshift() {
-		animator.SetInteger ("state", 1);
+		animator.SetInteger ("state", lastState * -1);
+		lastState *= -1;
 		animator.SetInteger ("character_direction", 0);
 	}
 
