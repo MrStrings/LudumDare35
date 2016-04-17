@@ -5,9 +5,10 @@ public class DynamicLayering : MonoBehaviour {
 
 	public Transform player;
 
-	// Use this for initialization
-	void Start () {
-		
+	//Collider2D rend;
+
+	void Start() {
+	//	rend = GetComponent<Collider2D>();
 	}
 	
 	// Update is called once per frame

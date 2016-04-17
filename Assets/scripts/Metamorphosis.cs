@@ -27,7 +27,7 @@ public class Metamorphosis : MonoBehaviour {
 		animator.SetInteger("state", 0);
 		animator.SetTrigger ("transform");
 
-		Invoke("Shapeshift", 1f);
+		Invoke("Shapeshift", 0.5f);
 	}
 
 	public void Shapeshift() {
