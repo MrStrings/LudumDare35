@@ -11,3 +11,7 @@
 /Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/stringhini/Documents/Unity/Ludum Dare 35/obj/Debug/Assembly-CSharp.dll
+/Users/stringhini/Documents/Unity/Ludum Dare 35/obj/Debug/Assembly-CSharp.dll.mdb
