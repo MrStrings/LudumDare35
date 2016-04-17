@@ -3,17 +3,17 @@ using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour {
 
-
-
 	public Transform player;
 	public float moveDelay;
 
+	public GameObject exclamation;
+	public float timeOfRecovery = 1f;
 
 	private float timeOfLastMovement;
-	public Vector2 currentDirection;
+	private Vector2 currentDirection;
 	private Vector3 lastPosition;
-	public int timesRepeated = 0;
 	private float timeSinceLastHit;
+	private float spawnTime;
 
 	private Animator animator;
 
@@ -23,6 +23,10 @@ public class EnemyBehaviour : MonoBehaviour {
 		animator = GetComponent<Animator> ();
 		timeOfLastMovement = -Time.timeSinceLevelLoad;
 		player = GameObject.FindWithTag("Player").transform;
+
+		FindObjectOfType<ControllerRandomizer> ().ChangedInputEvent += OnMetamorphosis;
+
+		spawnTime = Time.timeSinceLevelLoad;
 	}
 
 	
@@ -134,10 +138,34 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Wall") {
-			transform.position = lastPosition;
 
-			PositionVerify ();
+			if (Time.timeSinceLevelLoad > spawnTime + 0.5f) {
+				transform.position = lastPosition;
+
+				PositionVerify ();
+			} else {
+				Destroy (other.gameObject);
+			}
 				
 		}
+	}
+
+
+	void OnMetamorphosis() {
+		if (Mathf.Abs (player.position.x - transform.position.x) <= 32 &&
+		    Mathf.Abs (player.position.y - transform.position.y) <= 32) {
+
+			Instantiate (exclamation, transform.position + Vector3.up * 10, Quaternion.identity);
+
+			enabled = false;
+			Invoke ("SetEnabled", timeOfRecovery);
+			animator.SetInteger ("direction", 0);
+			animator.SetTrigger ("still");
+		}
+	}
+
+
+	void SetEnabled() {
+		enabled = true;
 	}
 }

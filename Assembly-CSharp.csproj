@@ -45,14 +45,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\scripts\AreaSpawner.cs" />
      <Compile Include="Assets\scripts\BoundControl.cs" />
      <Compile Include="Assets\scripts\ControllerRandomizer.cs" />
+     <Compile Include="Assets\scripts\Destroyer.cs" />
      <Compile Include="Assets\scripts\DynamicLayering.cs" />
      <Compile Include="Assets\scripts\EnemyBehaviour.cs" />
      <Compile Include="Assets\scripts\GameMenu.cs" />
      <Compile Include="Assets\scripts\Metamorphosis.cs" />
      <Compile Include="Assets\scripts\PixelMover.cs" />
      <Compile Include="Assets\scripts\ScoreSystem.cs" />
+     <Compile Include="Assets\scripts\TimedObjectDestructor.cs" />
      <Compile Include="Assets\scripts\Walker.cs" />
      <None Include="Assets\font\Minimal-Pixels\readme.txt" />
      <None Include="Assets\font\8-bit-limit\8bitlimit.txt" />

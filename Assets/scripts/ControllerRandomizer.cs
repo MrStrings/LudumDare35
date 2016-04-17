@@ -32,8 +32,9 @@ public class ControllerRandomizer : MonoBehaviour {
 
 
 	public Walker player;
-	public float changeInSeconds =  5, tellNextSecondsAfter = 3;
+	public float changeInSeconds =  5, tellNextSecondsBefore = 3;
 	public float timeBetweenDificulties = 15;
+	public float firstChangeTime = 10;
 
 	public Text nextKeyTextVertical, nextKeyTextHorizontal, keyTextVertical, keyTextHorizontal, warningText;
 
@@ -78,7 +79,7 @@ public class ControllerRandomizer : MonoBehaviour {
 		}
 
 		//Give player new input type
-		if (Time.timeSinceLevelLoad > timeOfLastChange + changeInSeconds) {
+		if (Time.timeSinceLevelLoad > firstChangeTime && Time.timeSinceLevelLoad > timeOfLastChange + changeInSeconds) {
 			if (!didChange)
 				ChangeInput ();
 			
@@ -91,7 +92,8 @@ public class ControllerRandomizer : MonoBehaviour {
 		}
 
 		//Define next input type
-		if (!didChange && Time.timeSinceLevelLoad > timeOfLastChange + tellNextSecondsAfter) {
+		if (!didChange && Time.timeSinceLevelLoad > timeOfLastChange +
+			(Time.timeSinceLevelLoad > firstChangeTime ? changeInSeconds : firstChangeTime) - tellNextSecondsBefore) {
 			ChangeInput ();
 			didChange = true;
 		}
@@ -283,5 +285,21 @@ public class ControllerRandomizer : MonoBehaviour {
 		mediumBundleVertical.Add (pair);
 		pair = new WalkPair (KeyCode.J, KeyCode.M);
 		mediumBundleVertical.Add (pair);*/
+	}
+
+
+
+	void OnDestroy() {
+
+		if (nextKeyTextVertical != null)
+			nextKeyTextVertical.text = "";
+		if (nextKeyTextHorizontal != null)
+			nextKeyTextHorizontal.text = "";
+		if (keyTextVertical != null)
+			keyTextVertical.text = "";
+		if (keyTextHorizontal != null)
+			keyTextHorizontal.text = "";
+		if (warningText != null)
+			warningText.text = "";
 	}
 }
