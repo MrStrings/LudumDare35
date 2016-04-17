@@ -3,15 +3,16 @@ using System.Collections;
 
 public class Walker : MonoBehaviour {
 
-	public Animator animator;
+
 
 	public KeyCode left, right, up, down;
 	public float moveDelay;
-	public int pixelsPerButtonPress;
 
 	private float timeOfLastMovement;
 	private Vector2 currentDirection;
 	private Vector3 lastPosition;
+
+	private Animator animator;
 
 	// Use this for initialization
 	void Start () {

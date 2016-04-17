@@ -45,8 +45,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\scripts\BoundControl.cs" />
      <Compile Include="Assets\scripts\ControllerRandomizer.cs" />
      <Compile Include="Assets\scripts\DynamicLayering.cs" />
+     <Compile Include="Assets\scripts\EnemyBehaviour.cs" />
      <Compile Include="Assets\scripts\GameMenu.cs" />
      <Compile Include="Assets\scripts\Metamorphosis.cs" />
      <Compile Include="Assets\scripts\PixelMover.cs" />
