@@ -28,7 +28,13 @@ public class Destroyer : MonoBehaviour {
 
 			other.GetComponent<SpriteRenderer> ().enabled = false;
 			other.GetComponent<BoxCollider2D> ().enabled = false;
+			other.GetComponent<Walker> ().enabled = false;
+			other.GetComponent<Animator> ().SetTrigger ("still");
+			other.GetComponent<Animator> ().SetInteger ("character_direction", 0);
 			FindObjectOfType<ScoreSystem> ().enabled = false;
+			FindObjectOfType<ScoreSystem> ().enabled = false;
+			FindObjectOfType<AudioManager> ().activateChange = true;
+
 			Destroy(GameObject.FindGameObjectWithTag ("GameController"));
 
 
@@ -48,6 +54,8 @@ public class Destroyer : MonoBehaviour {
 
 	void FadeOut() {
 		GameObject camera = GameObject.FindGameObjectWithTag ("MainCamera");
+		FindObjectOfType<AudioManager> ().activateChange = false;
+		FindObjectOfType<AudioManager> ().source.volume = 0;
 		Instantiate (fadeOut, camera.transform.TransformPoint(Vector3.zero) + Vector3.forward, Quaternion.identity);
 	}
 }

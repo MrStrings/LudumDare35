@@ -7,12 +7,14 @@ public class Walker : MonoBehaviour {
 
 	public KeyCode left, right, up, down;
 	public float moveDelay;
+	public AudioClip[] clips;
 
 	private float timeOfLastMovement;
 	private Vector2 currentDirection;
 	private Vector3 lastPosition;
 
 	private Animator animator;
+
 
 	// Use this for initialization
 	void Start () {
@@ -93,5 +95,12 @@ public class Walker : MonoBehaviour {
 		if (other.tag == "Wall") {
 			transform.position = lastPosition;
 		}
+	}
+
+
+
+
+	public void PlayClip() {
+		AudioSource.PlayClipAtPoint (clips [Random.Range (0, clips.Length)], Vector3.zero, 0.5f);
 	}
 }

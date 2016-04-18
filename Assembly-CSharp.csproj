@@ -55,7 +55,9 @@
      <Compile Include="Assets\scripts\GameMenu.cs" />
      <Compile Include="Assets\scripts\Metamorphosis.cs" />
      <Compile Include="Assets\scripts\PixelMover.cs" />
+     <Compile Include="Assets\scripts\PlayerSpottedEvent.cs" />
      <Compile Include="Assets\scripts\ScoreSystem.cs" />
+     <Compile Include="Assets\scripts\SetExplosionWhenAwake.cs" />
      <Compile Include="Assets\scripts\SplashScreen.cs" />
      <Compile Include="Assets\scripts\TimedObjectDestructor.cs" />
      <Compile Include="Assets\scripts\Walker.cs" />

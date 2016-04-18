@@ -30,9 +30,12 @@ public class ControllerRandomizer : MonoBehaviour {
 	public delegate void ChangedInput();
 	public event ChangedInput ChangedInputEvent;
 
+	public delegate void ChoseInput();
+	public event ChoseInput ChosenInputEvent;
+
 
 	public Walker player;
-	public float changeInSeconds =  5, tellNextSecondsBefore = 3;
+	public float changeInSeconds =  10, changeInSeconds_hard = 5, tellNextSecondsBefore = 3;
 	public float timeBetweenDificulties = 15;
 	public float firstChangeTime = 10;
 
@@ -44,7 +47,7 @@ public class ControllerRandomizer : MonoBehaviour {
 	private List<WalkBundle> easyBundle;
 	private List<WalkPair> mediumBundleVertical, mediumBundleHorizontal;
 	private WalkBundle nextKeys;
-	private bool didChange, didChangeOnce;
+	private bool didChange, didChangeOnce, changedToHard;
 
 	// Use this for initialization
 	void Start () {
@@ -96,6 +99,9 @@ public class ControllerRandomizer : MonoBehaviour {
 			(Time.timeSinceLevelLoad > firstChangeTime ? changeInSeconds : firstChangeTime) - tellNextSecondsBefore) {
 			ChangeInput ();
 			didChange = true;
+
+			if (ChosenInputEvent != null)
+				ChosenInputEvent ();
 		}
 
 
@@ -122,7 +128,8 @@ public class ControllerRandomizer : MonoBehaviour {
 			nextKeys.right = horizontal.positive;
 
 
-		} else */if (Time.timeSinceLevelLoad < timeBetweenDificulties && didChangeOnce) {
+		} else */
+		if (didChangeOnce) {
 			WalkPair vertical, horizontal;
 			int i = Random.Range (0, 2);
 
@@ -145,7 +152,7 @@ public class ControllerRandomizer : MonoBehaviour {
 				nextKeys.right = horizontal.positive;
 			}
 
-		} else {// if (Time.timeSinceLevelLoad < 4 * timeBetweenDificulties) {
+		} else {
 			WalkPair vertical, horizontal;
 
 			vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
@@ -165,6 +172,14 @@ public class ControllerRandomizer : MonoBehaviour {
 			nextKeys.right = horizontal.positive;
 
 			didChangeOnce = true;
+		}
+
+
+		if (Time.timeSinceLevelLoad >= timeBetweenDificulties && !changedToHard) {
+			changeInSeconds = changeInSeconds_hard;
+			AudioManager audio =  GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager>();
+			audio.activateChange = true;
+			changedToHard = true;
 		}
 	}
 
