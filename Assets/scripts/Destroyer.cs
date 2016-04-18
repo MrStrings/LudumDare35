@@ -32,7 +32,6 @@ public class Destroyer : MonoBehaviour {
 			other.GetComponent<Animator> ().SetTrigger ("still");
 			other.GetComponent<Animator> ().SetInteger ("character_direction", 0);
 			FindObjectOfType<ScoreSystem> ().enabled = false;
-			FindObjectOfType<ScoreSystem> ().enabled = false;
 			FindObjectOfType<AudioManager> ().activateChange = true;
 
 			Destroy(GameObject.FindGameObjectWithTag ("GameController"));

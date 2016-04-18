@@ -40,6 +40,7 @@ public class ControllerRandomizer : MonoBehaviour {
 	public float firstChangeTime = 10;
 
 	public Text nextKeyTextVertical, nextKeyTextHorizontal, keyTextVertical, keyTextHorizontal, warningText;
+	public AudioClip warningAudio;
 
 	[HideInInspector]
 	public float timeOfLastChange;
@@ -110,6 +111,8 @@ public class ControllerRandomizer : MonoBehaviour {
 		if (Input.anyKey && !Input.GetKey (player.up) && !Input.GetKey (player.down)
 		    && !Input.GetKey (player.left) && !Input.GetKey (player.right)) {
 			warningText.text = "!";
+			if (Input.anyKeyDown)
+				AudioSource.PlayClipAtPoint (warningAudio, Vector3.zero, 0.1f);
 		} else {
 			warningText.text = "";
 		}

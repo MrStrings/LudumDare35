@@ -27,7 +27,7 @@ public class AreaSpawner : MonoBehaviour {
 
 		if (enemiesSpawn < maxSpawns && Time.timeSinceLevelLoad > lastSpawnTime + currentRate) {
 			Vector2 diff = Random.insideUnitCircle.normalized * spawnDistance;
-			Vector3 distance = center.position + Vector3.right * diff.x + Vector3.up * diff.y;
+			Vector3 distance = center.position + Vector3.right * Mathf.Ceil(diff.x) + Vector3.up * Mathf.Ceil(diff.y);
 			Instantiate (objects [Random.Range (0, objects.Length)], distance, Quaternion.identity);
 
 			lastSpawnTime = Time.timeSinceLevelLoad;
