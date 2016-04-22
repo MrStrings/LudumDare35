@@ -11,7 +11,6 @@ public class Walker : MonoBehaviour {
 
 	private float timeOfLastMovement;
 	private Vector2 currentDirection;
-	private Vector3 lastPosition;
 
 	private Animator animator;
 
@@ -53,7 +52,6 @@ public class Walker : MonoBehaviour {
 
 			SetAnimation ();
 
-			lastPosition = transform.position;
 			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
 		}
 	}
@@ -93,7 +91,7 @@ public class Walker : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Wall") {
-			transform.position = lastPosition;
+			transform.position = transform.position - (Vector3)currentDirection;
 		}
 	}
 

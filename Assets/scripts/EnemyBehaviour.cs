@@ -9,11 +9,17 @@ public class EnemyBehaviour : MonoBehaviour {
 	public GameObject exclamation;
 	public float timeOfRecovery = 1f;
 
-	private float timeOfLastMovement;
-	private Vector2 currentDirection;
+	public float enemyCode;
+
+	[HideInInspector]
+	public float timeOfLastMovement;
+
+	private Vector2 currentDirection = Vector2.right;
 	private Vector3 lastPosition;
 	private float timeSinceLastHit;
 	private float spawnTime;
+
+	private bool wait;
 
 	private Animator animator;
 
@@ -32,7 +38,6 @@ public class EnemyBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 	}
 
 
@@ -44,30 +49,31 @@ public class EnemyBehaviour : MonoBehaviour {
 
 			currentDirection = Vector2.zero;
 
-
-			if (playerDirection.x > 0.1f) {
-				currentDirection.x++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (playerDirection.x < -0.1f) {
-				currentDirection.x--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (playerDirection.y > 0.1f) {
-				currentDirection.y++;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
-			}
-			if (playerDirection.y < -0.1f) {
-				currentDirection.y--;
-				timeOfLastMovement = Time.timeSinceLevelLoad;
+			if (!wait) {
+				if (playerDirection.x > 0.05f) {
+					currentDirection.x++;
+					timeOfLastMovement = Time.timeSinceLevelLoad;
+				}
+				if (playerDirection.x < -0.05f) {
+					currentDirection.x--;
+					timeOfLastMovement = Time.timeSinceLevelLoad;
+				}
+				if (playerDirection.y > 0.05f) {
+					currentDirection.y++;
+					timeOfLastMovement = Time.timeSinceLevelLoad;
+				}
+				if (playerDirection.y < -0.05f) {
+					currentDirection.y--;
+					timeOfLastMovement = Time.timeSinceLevelLoad;
+				}
 			}
 
 			SetAnimation ();
 
 			lastPosition = transform.position;
 			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
-
-			PositionVerify ();
+			/*Debug.Log ("Current: " + currentDirection.ToString());
+			Debug.Log ("Distance: " + playerDirection.ToString());*/
 		}
 	}
 
@@ -105,32 +111,47 @@ public class EnemyBehaviour : MonoBehaviour {
 	}
 
 	Vector3 GetPlayerDirection() {
-		return (player.position - transform.position).normalized;
+		return ((Vector2)(player.position - transform.position)).normalized;
 
 	}
 
 
 	void PositionVerify() {
-
+		
 		if (Time.timeSinceLevelLoad < timeSinceLastHit + 0.2f) {
-			currentDirection = new Vector2 (-currentDirection.y, currentDirection.x);
+
+			if (Mathf.Abs (currentDirection.x) == Mathf.Abs (currentDirection.y)) {
+				currentDirection = new Vector2 (0, currentDirection.y);
+			} else if (Mathf.Abs (currentDirection.x) > Mathf.Abs (currentDirection.y)) {
+				Debug.Log ("Enemy got here!" + currentDirection.ToString());
+				currentDirection = new Vector2 (0, currentDirection.x);
+			} else {
+				Debug.Log ("Enemy got REALLY here!" + currentDirection.ToString());
+				currentDirection = new Vector2 (-currentDirection.y, 0);
+				Debug.Log ("Now..." + currentDirection.ToString());
+			}
+				
 			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
-			if (lastPosition.x == transform.position.x && lastPosition.y == transform.position.y) {
+
+			/*if (lastPosition.x == transform.position.x && lastPosition.y == transform.position.y) {
 				currentDirection = new Vector2 (-currentDirection.y, currentDirection.x);
 				PixelMover.Move (transform, currentDirection.x, currentDirection.y);
+				Debug.Log ("Verified!-1");
 
 				if (lastPosition.x == transform.position.x && lastPosition.y == transform.position.y) {
 					currentDirection = new Vector2 (-currentDirection.y, currentDirection.x);
 					PixelMover.Move (transform, currentDirection.x, currentDirection.y);
+
+					Debug.Log ("Verified!-2");
 				} else {
 					lastPosition = transform.position;
 				}
-			} else {
-				lastPosition = transform.position;
-			}
+			} else {*/
+			lastPosition = transform.position;
+		}
 				
 
-		}
+		//}
 
 
 		timeSinceLastHit = Time.timeSinceLevelLoad;
@@ -138,16 +159,48 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Wall") {
-
+			
 			if (Time.timeSinceLevelLoad > spawnTime + 0.5f) {
-				transform.position = lastPosition;
+				transform.position = transform.position - (Vector3)currentDirection;
 
 				PositionVerify ();
 			} else {
 				Destroy (other.gameObject);
+			}	
+		} if (other.tag == "Enemy") {
+
+			if (other.GetComponent<EnemyBehaviour> ().enemyCode > enemyCode) {
+				wait = true;
+				Invoke ("Enable", 1);
+
 			}
 				
+				
+			transform.position = transform.position - (Vector3)currentDirection;
+
 		}
+	}
+
+
+	void Enable() {
+		wait = false;
+	}
+
+	void OnTriggerStay2D(Collider2D other) {
+		if (other.tag == "Wall") {
+
+			if (Time.timeSinceLevelLoad > spawnTime + 0.5f) {
+				transform.position = transform.position - (Vector3)currentDirection;
+
+				PositionVerify ();
+			} else {
+				Destroy (other.gameObject);
+			}	
+		} /*if (other.tag == "Enemy") {
+
+			transform.position = transform.position - (Vector3)currentDirection;
+			//PositionVerify ();
+		}	*/
 	}
 
 
@@ -167,5 +220,12 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	void SetEnabled() {
 		enabled = true;
+	}
+
+	void OnDestroy() {
+		ControllerRandomizer ctrl = FindObjectOfType<ControllerRandomizer> ();
+
+		if (ctrl)
+			ctrl.ChangedInputEvent -= OnMetamorphosis;
 	}
 }

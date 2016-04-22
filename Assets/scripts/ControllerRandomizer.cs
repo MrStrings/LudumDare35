@@ -36,7 +36,7 @@ public class ControllerRandomizer : MonoBehaviour {
 
 	public Walker player;
 	public float changeInSeconds =  10, changeInSeconds_hard = 5, tellNextSecondsBefore = 3;
-	public float timeBetweenDificulties = 15;
+	public float timeBetweenDificulties = 70;
 	public float firstChangeTime = 10;
 
 	public Text nextKeyTextVertical, nextKeyTextHorizontal, keyTextVertical, keyTextHorizontal, warningText;
@@ -180,10 +180,11 @@ public class ControllerRandomizer : MonoBehaviour {
 
 		if (Time.timeSinceLevelLoad >= timeBetweenDificulties && !changedToHard) {
 			changeInSeconds = changeInSeconds_hard;
-			AudioManager audio =  GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager>();
+			AudioManager audio = GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager> ();
 			audio.activateChange = true;
 			changedToHard = true;
-		}
+		} else if (Time.timeSinceLevelLoad >= 2 * timeBetweenDificulties)
+			changeInSeconds = tellNextSecondsBefore + 1;
 	}
 
 
