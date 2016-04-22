@@ -18,13 +18,15 @@ public class GameMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (invoked) {
-			source.volume = Mathf.Max (0, source.volume - Time.deltaTime*2);
+			source.volume = Mathf.Max (0, source.volume - Time.deltaTime * 2);
 			
 		} else if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.Space)) {
 			Invoke ("loadScene", 2f);
 			fadeout.SetActive (true);
 			invoked = true;
-		} 
+		} else if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.Quit();
+		}
 	}
 
 

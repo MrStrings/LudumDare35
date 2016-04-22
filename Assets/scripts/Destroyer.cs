@@ -22,15 +22,15 @@ public class Destroyer : MonoBehaviour {
 
 
 
-	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == tagToDestroy) {
-			Instantiate (boom, other.transform.position, Quaternion.identity);
+	void OnCollisionEnter2D(Collision2D coll) {
+		if (coll.gameObject.tag == tagToDestroy) {
+			Instantiate (boom, coll.transform.position, Quaternion.identity);
 
-			other.GetComponent<SpriteRenderer> ().enabled = false;
-			other.GetComponent<BoxCollider2D> ().enabled = false;
-			other.GetComponent<Walker> ().enabled = false;
-			other.GetComponent<Animator> ().SetTrigger ("still");
-			other.GetComponent<Animator> ().SetInteger ("character_direction", 0);
+			coll.gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+			coll.gameObject.GetComponent<Collider2D> ().enabled = false;
+			coll.gameObject.GetComponent<Walker> ().enabled = false;
+			coll.gameObject.GetComponent<Animator> ().SetTrigger ("still");
+			coll.gameObject.GetComponent<Animator> ().SetInteger ("character_direction", 0);
 			FindObjectOfType<ScoreSystem> ().enabled = false;
 			FindObjectOfType<AudioManager> ().activateChange = true;
 

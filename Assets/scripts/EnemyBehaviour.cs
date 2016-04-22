@@ -23,6 +23,8 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	private Animator animator;
 
+	private float sin, cos;
+	private Vector2 offset;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +35,11 @@ public class EnemyBehaviour : MonoBehaviour {
 		FindObjectOfType<ControllerRandomizer> ().ChangedInputEvent += OnMetamorphosis;
 
 		spawnTime = Time.timeSinceLevelLoad;
+
+		sin = Mathf.Sin (-Mathf.PI/4);
+		cos = Mathf.Cos (-Mathf.PI/4);
+
+		offset = GetComponent<CircleCollider2D> ().offset;
 	}
 
 	
@@ -45,33 +52,45 @@ public class EnemyBehaviour : MonoBehaviour {
 
 		if (Time.timeSinceLevelLoad > timeOfLastMovement + moveDelay) {
 
-			Vector3 playerDirection = GetPlayerDirection ();
-
-			currentDirection = Vector2.zero;
-
 			if (!wait) {
-				if (playerDirection.x > 0.05f) {
-					currentDirection.x++;
-					timeOfLastMovement = Time.timeSinceLevelLoad;
-				}
-				if (playerDirection.x < -0.05f) {
-					currentDirection.x--;
-					timeOfLastMovement = Time.timeSinceLevelLoad;
-				}
-				if (playerDirection.y > 0.05f) {
-					currentDirection.y++;
-					timeOfLastMovement = Time.timeSinceLevelLoad;
-				}
-				if (playerDirection.y < -0.05f) {
-					currentDirection.y--;
-					timeOfLastMovement = Time.timeSinceLevelLoad;
-				}
-			}
+				Vector3 playerDirection = GetPlayerDirection ();
 
+				currentDirection = Vector2.zero;
+
+				if (playerDirection.x > 0.1f) {
+					currentDirection.x++;
+				}
+				if (playerDirection.x < -0.1f) {
+					currentDirection.x--;
+				}
+				if (playerDirection.y > 0.1f) {
+					currentDirection.y++;
+				}
+				if (playerDirection.y < -0.1f) {
+					currentDirection.y--;
+				}
+
+
+				/* Raycasting to avoid getting stuck in things */
+				RaycastHit2D hit = Physics2D.Raycast (transform.position + (Vector3)offset, currentDirection, currentDirection.magnitude * 10);
+				//Debug.DrawRay (transform.position + (Vector3)offset, currentDirection * 10, Color.red, 0.5f);
+				for (int i = 0; i < 8 && hit && hit.transform.tag != "Player"; i++) {
+					currentDirection = new Vector2 (currentDirection.x * cos - currentDirection.y * sin,
+						currentDirection.x * sin + currentDirection.y * cos);
+					hit = Physics2D.Raycast (transform.position + (Vector3)offset, currentDirection, currentDirection.magnitude);
+				//	Debug.DrawRay (transform.position + (Vector3)offset, currentDirection * 10, Color.red, 0.5f);
+
+					wait = true;
+					CancelInvoke ("StopWait");
+					Invoke ("StopWait", timeOfRecovery);
+				}
+
+			}
 			SetAnimation ();
 
+			timeOfLastMovement = Time.timeSinceLevelLoad;
 			lastPosition = transform.position;
-			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
+			PixelMover.Move (transform, 1.5f * currentDirection.x, currentDirection.y*1.5f);
 			/*Debug.Log ("Current: " + currentDirection.ToString());
 			Debug.Log ("Distance: " + playerDirection.ToString());*/
 		}
@@ -110,99 +129,11 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 	}
 
+
 	Vector3 GetPlayerDirection() {
 		return ((Vector2)(player.position - transform.position)).normalized;
 
 	}
-
-
-	void PositionVerify() {
-		
-		if (Time.timeSinceLevelLoad < timeSinceLastHit + 0.2f) {
-
-			if (Mathf.Abs (currentDirection.x) == Mathf.Abs (currentDirection.y)) {
-				currentDirection = new Vector2 (0, currentDirection.y);
-			} else if (Mathf.Abs (currentDirection.x) > Mathf.Abs (currentDirection.y)) {
-				Debug.Log ("Enemy got here!" + currentDirection.ToString());
-				currentDirection = new Vector2 (0, currentDirection.x);
-			} else {
-				Debug.Log ("Enemy got REALLY here!" + currentDirection.ToString());
-				currentDirection = new Vector2 (-currentDirection.y, 0);
-				Debug.Log ("Now..." + currentDirection.ToString());
-			}
-				
-			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
-
-			/*if (lastPosition.x == transform.position.x && lastPosition.y == transform.position.y) {
-				currentDirection = new Vector2 (-currentDirection.y, currentDirection.x);
-				PixelMover.Move (transform, currentDirection.x, currentDirection.y);
-				Debug.Log ("Verified!-1");
-
-				if (lastPosition.x == transform.position.x && lastPosition.y == transform.position.y) {
-					currentDirection = new Vector2 (-currentDirection.y, currentDirection.x);
-					PixelMover.Move (transform, currentDirection.x, currentDirection.y);
-
-					Debug.Log ("Verified!-2");
-				} else {
-					lastPosition = transform.position;
-				}
-			} else {*/
-			lastPosition = transform.position;
-		}
-				
-
-		//}
-
-
-		timeSinceLastHit = Time.timeSinceLevelLoad;
-	}
-
-	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == "Wall") {
-			
-			if (Time.timeSinceLevelLoad > spawnTime + 0.5f) {
-				transform.position = transform.position - (Vector3)currentDirection;
-
-				PositionVerify ();
-			} else {
-				Destroy (other.gameObject);
-			}	
-		} if (other.tag == "Enemy") {
-
-			if (other.GetComponent<EnemyBehaviour> ().enemyCode > enemyCode) {
-				wait = true;
-				Invoke ("Enable", 1);
-
-			}
-				
-				
-			transform.position = transform.position - (Vector3)currentDirection;
-
-		}
-	}
-
-
-	void Enable() {
-		wait = false;
-	}
-
-	void OnTriggerStay2D(Collider2D other) {
-		if (other.tag == "Wall") {
-
-			if (Time.timeSinceLevelLoad > spawnTime + 0.5f) {
-				transform.position = transform.position - (Vector3)currentDirection;
-
-				PositionVerify ();
-			} else {
-				Destroy (other.gameObject);
-			}	
-		} /*if (other.tag == "Enemy") {
-
-			transform.position = transform.position - (Vector3)currentDirection;
-			//PositionVerify ();
-		}	*/
-	}
-
 
 	void OnMetamorphosis() {
 		if (Mathf.Abs (player.position.x - transform.position.x) <= 32 &&
@@ -220,6 +151,20 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	void SetEnabled() {
 		enabled = true;
+	}
+
+	void StopWait() {
+		wait = false;
+	}
+
+	void OnCollisionEnter2D(Collision2D coll) {
+		if (coll.gameObject.tag == "Enemy" && coll.gameObject.GetComponent<EnemyBehaviour>().enemyCode > enemyCode) {
+			enabled = false;
+			Invoke ("SetEnabled", 2);
+			animator.SetInteger ("direction", 0);
+			animator.SetTrigger ("still");
+		}
+	
 	}
 
 	void OnDestroy() {
