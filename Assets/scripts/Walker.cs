@@ -50,6 +50,9 @@ public class Walker : MonoBehaviour {
 				timeOfLastMovement = Time.timeSinceLevelLoad;
 			}
 
+			currentDirection = currentDirection.normalized;
+			Debug.Log (currentDirection.ToString ());
+
 			SetAnimation ();
 
 			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
@@ -66,22 +69,22 @@ public class Walker : MonoBehaviour {
 				animator.SetInteger ("character_direction", 0);
 				animator.SetTrigger ("still");
 			}
-		} else if (currentDirection.x == -1) {
+		} else if (currentDirection.x < 0) {
 			if (aux_animator_variable != -2) {
 				animator.SetInteger ("character_direction", -2);
 				animator.SetTrigger ("left");
 			}
-		} else if (currentDirection.x == 1) {
+		} else if (currentDirection.x > 0) {
 			if (aux_animator_variable != 2) {
 				animator.SetInteger ("character_direction", 2);
 				animator.SetTrigger ("right");
 			}
-		} else if (currentDirection.y == 1) {
+		} else if (currentDirection.y > 0) {
 			if (aux_animator_variable != 1) {
 				animator.SetInteger ("character_direction", 1);
 				animator.SetTrigger ("up");
 			}
-		} else if (currentDirection.y == -1) {
+		} else if (currentDirection.y < 0) {
 			if (aux_animator_variable != -1) {
 				animator.SetInteger ("character_direction", -1);
 				animator.SetTrigger ("down");

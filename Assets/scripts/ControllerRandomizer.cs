@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ControllerRandomizer : MonoBehaviour {
 
+	public enum KeyboardType {QWERTY, AZERTY, DVORAK};
+
+
 	/* Class for easily defining 4 keys */
 	public class WalkBundle {
 		public KeyCode left, right, up, down;
@@ -33,6 +36,8 @@ public class ControllerRandomizer : MonoBehaviour {
 	public delegate void ChoseInput();
 	public event ChoseInput ChosenInputEvent;
 
+	[HideInInspector]
+	public static KeyboardType keyboardType = KeyboardType.QWERTY;
 
 	public Walker player;
 	public float changeInSeconds =  10, changeInSeconds_hard = 5, tellNextSecondsBefore = 3;
@@ -61,6 +66,20 @@ public class ControllerRandomizer : MonoBehaviour {
 		timeOfLastChange = 0;
 
 		SetBundles ();
+
+		if (keyboardType == KeyboardType.QWERTY) {
+			keyTextVertical.text = "WS";
+			keyTextHorizontal.text = "AD";
+			SetInput (KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		} else if (keyboardType == KeyboardType.AZERTY) {
+			keyTextVertical.text = "ZS";
+			keyTextHorizontal.text = "AD";
+			SetInput (KeyCode.A, KeyCode.D, KeyCode.Z, KeyCode.S);
+		} else if (keyboardType == KeyboardType.DVORAK) {
+			keyTextVertical.text = "PU";
+			keyTextHorizontal.text = "EI";
+			SetInput (KeyCode.E, KeyCode.I, KeyCode.P, KeyCode.U);
+		}
 
 	}
 	
@@ -198,112 +217,171 @@ public class ControllerRandomizer : MonoBehaviour {
 
 	public void SetBundles() {
 		WalkBundle bundle;
-
-		bundle = new WalkBundle (KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.S, KeyCode.F, KeyCode.E, KeyCode.D);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.D, KeyCode.G, KeyCode.R, KeyCode.F);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.F, KeyCode.H, KeyCode.T, KeyCode.G);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.G, KeyCode.J, KeyCode.Y, KeyCode.H);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.H, KeyCode.K, KeyCode.U, KeyCode.J);
-		easyBundle.Add (bundle);
-		bundle = new WalkBundle (KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K);
-		easyBundle.Add (bundle);
-
-
 		WalkPair pair;
-		/*pair = new WalkPair (KeyCode.Q, KeyCode.W);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.W, KeyCode.E);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.E, KeyCode.R);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.R, KeyCode.T);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.T, KeyCode.Y);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.Y, KeyCode.U);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.U, KeyCode.I);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.I, KeyCode.O);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.O, KeyCode.P);
-		mediumBundleHorizontal.Add (pair);
 
-		pair = new WalkPair (KeyCode.A, KeyCode.S);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.S, KeyCode.D);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.D, KeyCode.F);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.F, KeyCode.G);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.G, KeyCode.H);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.H, KeyCode.J);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.J, KeyCode.K);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.K, KeyCode.L);
-		mediumBundleHorizontal.Add (pair);*/
+		if (keyboardType == KeyboardType.QWERTY) {
+
+			bundle = new WalkBundle (KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.S, KeyCode.F, KeyCode.E, KeyCode.D);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.D, KeyCode.G, KeyCode.R, KeyCode.F);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.F, KeyCode.H, KeyCode.T, KeyCode.G);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.G, KeyCode.J, KeyCode.Y, KeyCode.H);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.H, KeyCode.K, KeyCode.U, KeyCode.J);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K);
+			easyBundle.Add (bundle);
 
 
-		pair = new WalkPair (KeyCode.Z, KeyCode.X);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.X, KeyCode.C);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.C, KeyCode.V);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.V, KeyCode.B);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.B, KeyCode.N);
-		mediumBundleHorizontal.Add (pair);
-		pair = new WalkPair (KeyCode.N, KeyCode.M);
-		mediumBundleHorizontal.Add (pair);
+			
+
+			pair = new WalkPair (KeyCode.Z, KeyCode.X);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.X, KeyCode.C);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.C, KeyCode.V);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.V, KeyCode.B);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.B, KeyCode.N);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.N, KeyCode.M);
+			mediumBundleHorizontal.Add (pair);
+
+
+			pair = new WalkPair (KeyCode.A, KeyCode.Q);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.S, KeyCode.W);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.D, KeyCode.E);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.F, KeyCode.R);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.G, KeyCode.T);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.H, KeyCode.Y);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.J, KeyCode.U);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.K, KeyCode.I);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.L, KeyCode.O);
+			mediumBundleVertical.Add (pair);
+
+
+
+
+		} else if (keyboardType == KeyboardType.AZERTY) {
+
+			bundle = new WalkBundle (KeyCode.Q, KeyCode.D, KeyCode.Z, KeyCode.S);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.S, KeyCode.F, KeyCode.E, KeyCode.D);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.D, KeyCode.G, KeyCode.R, KeyCode.F);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.F, KeyCode.H, KeyCode.T, KeyCode.G);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.G, KeyCode.J, KeyCode.Y, KeyCode.H);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.H, KeyCode.K, KeyCode.U, KeyCode.J);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.K, KeyCode.M, KeyCode.O, KeyCode.L);
+			easyBundle.Add (bundle);
+
+
+			pair = new WalkPair (KeyCode.W, KeyCode.X);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.X, KeyCode.C);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.C, KeyCode.V);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.V, KeyCode.B);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.B, KeyCode.N);
+			mediumBundleHorizontal.Add (pair);
+
+			pair = new WalkPair (KeyCode.Q, KeyCode.A);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.S, KeyCode.Z);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.D, KeyCode.E);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.F, KeyCode.R);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.G, KeyCode.T);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.H, KeyCode.Y);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.J, KeyCode.U);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.K, KeyCode.I);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.L, KeyCode.O);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.M, KeyCode.P);
+			mediumBundleVertical.Add (pair);
 
 
 
 
 
+		} else if (keyboardType == KeyboardType.DVORAK) {
 
-		pair = new WalkPair (KeyCode.A, KeyCode.Q);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.S, KeyCode.W);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.D, KeyCode.E);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.F, KeyCode.R);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.G, KeyCode.T);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.H, KeyCode.Y);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.J, KeyCode.U);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.K, KeyCode.I);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.L, KeyCode.O);
-		mediumBundleVertical.Add (pair);
 
-		/*pair = new WalkPair (KeyCode.A, KeyCode.Z);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.S, KeyCode.X);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.D, KeyCode.C);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.F, KeyCode.V);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.G, KeyCode.B);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.H, KeyCode.N);
-		mediumBundleVertical.Add (pair);
-		pair = new WalkPair (KeyCode.J, KeyCode.M);
-		mediumBundleVertical.Add (pair);*/
+			bundle = new WalkBundle (KeyCode.E, KeyCode.I, KeyCode.P, KeyCode.U);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.U, KeyCode.D, KeyCode.Y, KeyCode.I);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.I, KeyCode.H, KeyCode.F, KeyCode.D);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.D, KeyCode.T, KeyCode.G, KeyCode.H);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.H, KeyCode.N, KeyCode.C, KeyCode.T);
+			easyBundle.Add (bundle);
+			bundle = new WalkBundle (KeyCode.T, KeyCode.S, KeyCode.R, KeyCode.N);
+			easyBundle.Add (bundle);
+
+
+			pair = new WalkPair (KeyCode.Q, KeyCode.J);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.J, KeyCode.K);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.K, KeyCode.X);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.X, KeyCode.B);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.B, KeyCode.M);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.M, KeyCode.W);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.W, KeyCode.V);
+			mediumBundleHorizontal.Add (pair);
+			pair = new WalkPair (KeyCode.V, KeyCode.Z);
+			mediumBundleHorizontal.Add (pair);
+
+
+			pair = new WalkPair (KeyCode.U, KeyCode.P);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.I, KeyCode.Y);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.D, KeyCode.F);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.H, KeyCode.G);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.T, KeyCode.C);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.N, KeyCode.R);
+			mediumBundleVertical.Add (pair);
+			pair = new WalkPair (KeyCode.S, KeyCode.L);
+			mediumBundleVertical.Add (pair);
+		}
+
 	}
 
 

@@ -86,6 +86,9 @@ public class EnemyBehaviour : MonoBehaviour {
 				}
 
 			}
+
+			currentDirection = currentDirection.normalized;
+
 			SetAnimation ();
 
 			timeOfLastMovement = Time.timeSinceLevelLoad;
@@ -106,22 +109,22 @@ public class EnemyBehaviour : MonoBehaviour {
 				animator.SetInteger ("direction", 0);
 				animator.SetTrigger ("still");
 			}
-		} else if (currentDirection.x == -1) {
+		} else if (currentDirection.x < 0) {
 			if (aux_animator_variable != -2) {
 				animator.SetInteger ("direction", -2);
 				animator.SetTrigger ("left");
 			}
-		} else if (currentDirection.x == 1) {
+		} else if (currentDirection.x > 0) {
 			if (aux_animator_variable != 2) {
 				animator.SetInteger ("direction", 2);
 				animator.SetTrigger ("right");
 			}
-		} else if (currentDirection.y == 1) {
+		} else if (currentDirection.y > 0) {
 			if (aux_animator_variable != 1) {
 				animator.SetInteger ("direction", 1);
 				animator.SetTrigger ("up");
 			}
-		} else if (currentDirection.y == -1) {
+		} else if (currentDirection.y < 0) {
 			if (aux_animator_variable != -1) {
 				animator.SetInteger ("direction", -1);
 				animator.SetTrigger ("down");
