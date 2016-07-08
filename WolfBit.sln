@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{6B0B4B7A-596B-7CF6-0ADD-420DA8D816B8}") = "WolfBit", "Assembly-CSharp.csproj", "{A1B69177-2702-11A3-76FE-4694E31DD50E}"
+EndProject
+Project("{6B0B4B7A-596B-7CF6-0ADD-420DA8D816B8}") = "WolfBit", "Assembly-CSharp-Editor.csproj", "{F4EB49B5-820B-F7A8-5E02-FEEF6333C284}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1B69177-2702-11A3-76FE-4694E31DD50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B69177-2702-11A3-76FE-4694E31DD50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B69177-2702-11A3-76FE-4694E31DD50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B69177-2702-11A3-76FE-4694E31DD50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4EB49B5-820B-F7A8-5E02-FEEF6333C284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4EB49B5-820B-F7A8-5E02-FEEF6333C284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4EB49B5-820B-F7A8-5E02-FEEF6333C284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4EB49B5-820B-F7A8-5E02-FEEF6333C284}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

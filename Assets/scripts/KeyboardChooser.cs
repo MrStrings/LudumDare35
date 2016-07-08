@@ -12,11 +12,9 @@ public class KeyboardChooser : MonoBehaviour {
 
 	private int i;
 
-	private Animator textAnimator;
 
 	// Use this for initialization
 	void Start () {
-		textAnimator = text.gameObject.GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame

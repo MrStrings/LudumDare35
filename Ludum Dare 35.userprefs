@@ -2,18 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/Walker.cs">
     <Files>
-      <File FileName="Assets/scripts/PixelMover.cs" Line="10" Column="22" />
-      <File FileName="Assets/scripts/ControllerRandomizer.cs" Line="7" Column="2" />
+      <File FileName="Assets/scripts/PixelMover.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/ControllerRandomizer.cs" Line="1" Column="1" />
       <File FileName="Assets/scripts/ScoreSystem.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/Walker.cs" Line="53" Column="19" />
-      <File FileName="Assets/scripts/DynamicLayering.cs" Line="10" Column="2" />
-      <File FileName="Assets/scripts/SplashScreen.cs" Line="19" Column="3" />
-      <File FileName="Assets/scripts/AreaSpawner.cs" Line="33" Column="31" />
-      <File FileName="Assets/scripts/EnemyBehaviour.cs" Line="125" Column="27" />
-      <File FileName="Assets/scripts/PixelPerfectonator.cs" Line="12" Column="18" />
-      <File FileName="Assets/scripts/Destroyer.cs" Line="31" Column="37" />
-      <File FileName="Assets/scripts/GameMenu.cs" Line="28" Column="23" />
-      <File FileName="Assets/scripts/Metamorphosis.cs" Line="17" Column="1" />
+      <File FileName="Assets/scripts/Walker.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/KeyboardChooser.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

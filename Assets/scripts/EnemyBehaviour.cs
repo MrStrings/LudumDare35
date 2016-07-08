@@ -15,9 +15,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	public float timeOfLastMovement;
 
 	private Vector2 currentDirection = Vector2.right;
-	private Vector3 lastPosition;
 	private float timeSinceLastHit;
-	private float spawnTime;
 
 	private bool wait;
 
@@ -33,8 +31,6 @@ public class EnemyBehaviour : MonoBehaviour {
 		player = GameObject.FindWithTag("Player").transform;
 
 		FindObjectOfType<ControllerRandomizer> ().ChangedInputEvent += OnMetamorphosis;
-
-		spawnTime = Time.timeSinceLevelLoad;
 
 		sin = Mathf.Sin (-Mathf.PI/4);
 		cos = Mathf.Cos (-Mathf.PI/4);
@@ -92,7 +88,6 @@ public class EnemyBehaviour : MonoBehaviour {
 			SetAnimation ();
 
 			timeOfLastMovement = Time.timeSinceLevelLoad;
-			lastPosition = transform.position;
 			PixelMover.Move (transform, 1.5f * currentDirection.x, currentDirection.y*1.5f);
 			/*Debug.Log ("Current: " + currentDirection.ToString());
 			Debug.Log ("Distance: " + playerDirection.ToString());*/

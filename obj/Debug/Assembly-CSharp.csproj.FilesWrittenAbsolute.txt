@@ -15,3 +15,20 @@
 /Users/stringhini/Documents/Unity/Ludum Dare 35/Temp/bin/Debug/Assembly-CSharp.dll
 /Users/stringhini/Documents/Unity/Ludum Dare 35/obj/Debug/Assembly-CSharp.dll
 /Users/stringhini/Documents/Unity/Ludum Dare 35/obj/Debug/Assembly-CSharp.dll.mdb
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Assembly-CSharp.dll
+/Users/stringhini/Documents/Unity/WolfBit/obj/Debug/Assembly-CSharp.dll
+/Users/stringhini/Documents/Unity/WolfBit/obj/Debug/Assembly-CSharp.dll.mdb
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/UnityEngine.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/UnityEditor.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/UnityEngine.UI.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/UnityEngine.Networking.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Mono.Cecil.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Unity.SerializationLogic.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Unity.DataContract.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/ICSharpCode.NRefactory.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Unity.UNetWeaver.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Unity.UNetWeaver.dll.mdb
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Unity.CecilTools.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Mono.Cecil.Pdb.dll
+/Users/stringhini/Documents/Unity/WolfBit/Temp/bin/Debug/Mono.Cecil.Mdb.dll
