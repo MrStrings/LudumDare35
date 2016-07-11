@@ -138,6 +138,7 @@ public class LeaderboardManager : MonoBehaviour {
 			score = JsonUtility.FromJson<Score> (www.text);
 			waitingToEndRequest = false;
 		} else {
+			Debug.Log ("Error: " + www.error);
 			leaderboardText.text = "\n\n\n Couldn't Access \n Leaderboard. \n\n\n Press Enter \n to Return to MENU";
 		}
 	}
