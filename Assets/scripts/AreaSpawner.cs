@@ -14,6 +14,7 @@ public class AreaSpawner : MonoBehaviour {
 	private float currentRate;
 
 	public float enemiesSpawn;
+	public float enemiesAlive;
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,7 @@ public class AreaSpawner : MonoBehaviour {
 	void Update () {
 		currentRate = Mathf.Max (minTime, maxTime - decreaseRate * Time.timeSinceLevelLoad);
 
-		if (enemiesSpawn < maxSpawns && Time.timeSinceLevelLoad > lastSpawnTime + currentRate) {
+		if (enemiesAlive < maxSpawns && Time.timeSinceLevelLoad > lastSpawnTime + currentRate) {
 			Vector2 diff = Random.insideUnitCircle.normalized * spawnDistance;
 			Vector3 distance = center.position + Vector3.right * Mathf.Ceil(diff.x) + Vector3.up * Mathf.Ceil(diff.y);
 			GameObject obj = Instantiate (objects [Random.Range (0, objects.Length)], distance, Quaternion.identity) as GameObject;
@@ -34,6 +35,7 @@ public class AreaSpawner : MonoBehaviour {
 
 			lastSpawnTime = Time.timeSinceLevelLoad;
 			enemiesSpawn++;
+			enemiesAlive++;
 		}
 	}
 }

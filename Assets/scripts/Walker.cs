@@ -51,7 +51,6 @@ public class Walker : MonoBehaviour {
 			}
 
 			currentDirection = currentDirection.normalized;
-			Debug.Log (currentDirection.ToString ());
 
 			SetAnimation ();
 

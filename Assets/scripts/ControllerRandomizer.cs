@@ -135,6 +135,15 @@ public class ControllerRandomizer : MonoBehaviour {
 		} else {
 			warningText.text = "";
 		}
+
+
+		if (Time.timeSinceLevelLoad >= timeBetweenDificulties && !changedToHard) {
+			changeInSeconds = changeInSeconds_hard;
+			AudioManager audio = GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager> ();
+			audio.activateChange = true;
+			changedToHard = true;
+		} else if (Time.timeSinceLevelLoad >= 2 * timeBetweenDificulties)
+			changeInSeconds = tellNextSecondsBefore + 1;
 	}
 
 
@@ -195,15 +204,6 @@ public class ControllerRandomizer : MonoBehaviour {
 
 			didChangeOnce = true;
 		}
-
-
-		if (Time.timeSinceLevelLoad >= timeBetweenDificulties && !changedToHard) {
-			changeInSeconds = changeInSeconds_hard;
-			AudioManager audio = GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager> ();
-			audio.activateChange = true;
-			changedToHard = true;
-		} else if (Time.timeSinceLevelLoad >= 2 * timeBetweenDificulties)
-			changeInSeconds = tellNextSecondsBefore + 1;
 	}
 
 

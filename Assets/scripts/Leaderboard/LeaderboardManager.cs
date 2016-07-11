@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LeaderboardManager : MonoBehaviour {
 
@@ -14,7 +15,7 @@ public class LeaderboardManager : MonoBehaviour {
 	}
 
 
-	public Text playerTextBox;
+	public Text leaderboardText, playerText, infoText, scoreText;
 	public float maxNameLength = 10;
 
 	private string playerName = "";
@@ -22,6 +23,7 @@ public class LeaderboardManager : MonoBehaviour {
 	private string token = "5777e7ade0d3614674758851947";
 	private string url;
 	private WWW www;
+	private Score score;
 
 	private bool didset = false, didget = false;
 	private bool waitingToEndRequest = false;
@@ -29,6 +31,9 @@ public class LeaderboardManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		url = "http://gmscoreboard.com/handle_score.php?tagid=" + token;
+		score = new Score ();
+
+		scoreText.text = "Your Score:\n" + ScoreSystem.time.ToString();
 	}
 	
 	// Update is called once per frame
@@ -37,10 +42,14 @@ public class LeaderboardManager : MonoBehaviour {
 			NameInput ();
 		} else if (state == State.LeaderboardDisplay) {
 
+			if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.Space)) {
+				SceneManager.LoadScene("Main Menu");
+			}
+
 			if (!didset) {
 				if (playerName.Length > 0) {
 					waitingToEndRequest = true;
-					SendRequest (playerName, "1");
+					SendRequest (playerName, ScoreSystem.time.ToString());
 				}
 					
 				didset = true;
@@ -49,6 +58,9 @@ public class LeaderboardManager : MonoBehaviour {
 				GetRequest ();
 				didget = true;
 			}
+
+			if (score.p1 != null)
+				DisplayLeaderboard ();
 		}
 	}
 
@@ -69,17 +81,40 @@ public class LeaderboardManager : MonoBehaviour {
 					}
 				} else if (kcode == KeyCode.Return) {
 					state = State.LeaderboardDisplay;
+					infoText.enabled = false;
+					playerText.enabled = false;
+					scoreText.enabled = false;
+					leaderboardText.enabled = true;
+					leaderboardText.text = "Loading...";
+
+					infoText.text = "Press Enter\nTo Menu";
 				}
 			}
 		}
 
-		if (playerName.Length > 0)
-			playerTextBox.text = playerName;
-		else 
-			playerTextBox.text = "________";
+		if (playerName.Length > 0) {
+			playerText.text = playerName;
+			infoText.text = "Press Enter\nTo Submit";
+		} else {
+			playerText.text = "__________";
+			infoText.text = "Press Enter\nTo Dismiss";
+		}
 
 	}
 
+
+	void DisplayLeaderboard() {
+		leaderboardText.text = "1- " + score.p1 + ": " + score.s1 +
+							"\n2- " + score.p2 + ": " + score.s2 +
+							"\n3- " + score.p3 + ": " + score.s3 +
+							"\n4- " + score.p4 + ": " + score.s4 +
+							"\n5- " + score.p5 + ": " + score.s5 +
+							"\n6- " + score.p6 + ": " + score.s6 +
+							"\n7- " + score.p7 + ": " + score.s7 +
+							"\n8- " + score.p8 + ": " + score.s8 +
+							"\n9- " + score.p9 + ": " + score.s9 +
+							"\n10- " + score.p10 + ": " + score.s10;
+	}
 
 	void GetRequest() {
 		www = new WWW (url+"&getscore=10");
@@ -101,11 +136,10 @@ public class LeaderboardManager : MonoBehaviour {
 		// check for errors
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.text);
-			Score score = JsonUtility.FromJson<Score> (www.text);
+			score = JsonUtility.FromJson<Score> (www.text);
 			waitingToEndRequest = false;
-			//print (score.p1);
 		} else {
-			Debug.Log ("WWW Error: " + www.error);
+			leaderboardText.text = "\n\n\n Couldn't Access \n Leaderboard. \n\n\n Press Enter \n to Return to MENU";
 		}
 	}
 

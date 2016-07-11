@@ -10,6 +10,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	public float timeOfRecovery = 1f;
 
 	public float enemyCode;
+	public float timeOutsideViewForDestruction = 20;
 
 	[HideInInspector]
 	public float timeOfLastMovement;
@@ -23,6 +24,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	private float sin, cos;
 	private Vector2 offset;
+	private float timeOutOfView;
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +43,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		CheckIfShouldDestroy ();
 	}
 
 
@@ -88,7 +91,7 @@ public class EnemyBehaviour : MonoBehaviour {
 			SetAnimation ();
 
 			timeOfLastMovement = Time.timeSinceLevelLoad;
-			PixelMover.Move (transform, 1.5f * currentDirection.x, currentDirection.y*1.5f);
+			PixelMover.Move (transform, currentDirection.x, currentDirection.y);
 			/*Debug.Log ("Current: " + currentDirection.ToString());
 			Debug.Log ("Distance: " + playerDirection.ToString());*/
 		}
@@ -163,6 +166,20 @@ public class EnemyBehaviour : MonoBehaviour {
 			animator.SetTrigger ("still");
 		}
 	
+	}
+
+	void CheckIfShouldDestroy () {
+		if (((Vector2)(player.position - transform.position)).magnitude >= 36)
+			timeOutOfView += Time.deltaTime;
+		else {
+			timeOutOfView = 0;
+		}
+
+
+		if (timeOutOfView >= timeOutsideViewForDestruction) {
+			FindObjectOfType<AreaSpawner> ().enemiesAlive--;
+			Destroy (gameObject);
+		}
 	}
 
 	void OnDestroy() {
