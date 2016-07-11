@@ -66,6 +66,14 @@ public class LeaderboardManager : MonoBehaviour {
 
 	void NameInput() {
 
+		if (playerName.Length > 0) {
+			playerText.text = playerName;
+			infoText.text = "Press Enter\nTo Submit";
+		} else {
+			playerText.text = "__________";
+			infoText.text = "Press Enter\nTo Dismiss";
+		}
+
 		foreach(KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
 		{
 			if (Input.GetKeyDown (kcode)) {
@@ -81,7 +89,6 @@ public class LeaderboardManager : MonoBehaviour {
 					}
 				} else if (kcode == KeyCode.Return) {
 					state = State.LeaderboardDisplay;
-					infoText.enabled = false;
 					playerText.enabled = false;
 					scoreText.enabled = false;
 					leaderboardText.enabled = true;
@@ -90,14 +97,6 @@ public class LeaderboardManager : MonoBehaviour {
 					infoText.text = "Press Enter\nTo Menu";
 				}
 			}
-		}
-
-		if (playerName.Length > 0) {
-			playerText.text = playerName;
-			infoText.text = "Press Enter\nTo Submit";
-		} else {
-			playerText.text = "__________";
-			infoText.text = "Press Enter\nTo Dismiss";
 		}
 
 	}
