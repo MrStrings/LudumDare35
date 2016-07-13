@@ -52,8 +52,12 @@ public class ControllerRandomizer : MonoBehaviour {
 
 	private List<WalkBundle> easyBundle;
 	private List<WalkPair> mediumBundleVertical, mediumBundleHorizontal;
+	private List<KeyCode> keycodes;
 	private WalkBundle nextKeys;
-	private bool didChange, didChangeOnce, changedToHard;
+	private bool didChange, didChangeOnce;
+
+
+	public float difficultyLevel = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -61,26 +65,13 @@ public class ControllerRandomizer : MonoBehaviour {
 		easyBundle = new List<WalkBundle> ();
 		mediumBundleHorizontal = new List<WalkPair> ();
 		mediumBundleVertical = new List<WalkPair> ();
+		keycodes = new List<KeyCode> ();
 		nextKeys = new WalkBundle (player.left, player.right, player.up, player.down);
 
 		timeOfLastChange = 0;
 
 		SetBundles ();
-
-		if (keyboardType == KeyboardType.QWERTY) {
-			keyTextVertical.text = "WS";
-			keyTextHorizontal.text = "AD";
-			SetInput (KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
-		} else if (keyboardType == KeyboardType.AZERTY) {
-			keyTextVertical.text = "ZS";
-			keyTextHorizontal.text = "AD";
-			SetInput (KeyCode.A, KeyCode.D, KeyCode.Z, KeyCode.S);
-		} else if (keyboardType == KeyboardType.DVORAK) {
-			keyTextVertical.text = "PU";
-			keyTextHorizontal.text = "EI";
-			SetInput (KeyCode.E, KeyCode.I, KeyCode.P, KeyCode.U);
-		}
-
+		SetStartingButtons ();
 	}
 	
 	// Update is called once per frame
@@ -88,27 +79,16 @@ public class ControllerRandomizer : MonoBehaviour {
 
 		//timeText.text = ((int)Mathf.Ceil((timeOfLastChange + changeInSeconds) - Time.timeSinceLevelLoad)).ToString ();
 
-		keyTextVertical.text = player.up.ToString ().ToUpper () + player.down.ToString ().ToUpper ();
-		keyTextHorizontal.text = player.left.ToString ().ToUpper () + player.right.ToString ().ToUpper ();
-
-		if (didChange) {
-			nextKeyTextVertical.text = (player.up != nextKeys.up ? nextKeys.up.ToString ().ToUpper () : " ") +
-									   (player.down != nextKeys.down ? nextKeys.down.ToString ().ToUpper () : " ");
-			nextKeyTextHorizontal.text = (player.left != nextKeys.left ? nextKeys.left.ToString ().ToUpper () : " ") +
-										 (player.right != nextKeys.right ? nextKeys.right.ToString ().ToUpper () : " ");
-		} else {
-			nextKeyTextHorizontal.text = "";
-			nextKeyTextVertical.text = "";
-		}
+		ChangeText ();
 
 		//Give player new input type
 		if (Time.timeSinceLevelLoad > firstChangeTime && Time.timeSinceLevelLoad > timeOfLastChange + changeInSeconds) {
+
+			//If input hasnt changed yet, despite below ("//Define next input type")
 			if (!didChange)
 				ChangeInput ();
 			
 			SetInput (nextKeys.left, nextKeys.right, nextKeys.up, nextKeys.down);
-			if (ChangedInputEvent != null)
-				ChangedInputEvent ();
 
 			timeOfLastChange = Time.timeSinceLevelLoad;
 			didChange = false;
@@ -137,75 +117,186 @@ public class ControllerRandomizer : MonoBehaviour {
 		}
 
 
-		if (Time.timeSinceLevelLoad >= timeBetweenDificulties && !changedToHard) {
-			changeInSeconds = changeInSeconds_hard;
-			AudioManager audio = GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager> ();
-			audio.activateChange = true;
-			changedToHard = true;
-		} else if (Time.timeSinceLevelLoad >= 2 * timeBetweenDificulties)
-			changeInSeconds = tellNextSecondsBefore + 1;
+		ManageDificulties ();
 	}
 
 
-	public void ChangeInput(){
-		/*if (Time.timeSinceLevelLoad < timeBetweenDificulties) {
-			nextKeys = easyBundle [Random.Range (0, easyBundle.Count)];
-
-		} else if (Time.timeSinceLevelLoad < 2 * timeBetweenDificulties) {
-			WalkPair horizontal;
-
-			horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
-			nextKeys.left = horizontal.negative;
-			nextKeys.right = horizontal.positive;
 
 
-		} else */
-		if (didChangeOnce) {
-			WalkPair vertical, horizontal;
-			int i = Random.Range (0, 2);
-
-			if (i == 0) {
-				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
-
-				if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
-					vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
-					
-				nextKeys.up = vertical.positive;
-				nextKeys.down = vertical.negative;
-			} else {
-				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
-
-				if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
-					horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
-				
-
-				nextKeys.left = horizontal.negative;
-				nextKeys.right = horizontal.positive;
-			}
-
-		} else {
-			WalkPair vertical, horizontal;
-
-			vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
-			horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
-
-
-			if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
-				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
-
-			if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
-				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
-			
-
-			nextKeys.up = vertical.positive;
-			nextKeys.down = vertical.negative;
-			nextKeys.left = horizontal.negative;
-			nextKeys.right = horizontal.positive;
-
-			didChangeOnce = true;
+	public void SetStartingButtons() {
+		if (keyboardType == KeyboardType.QWERTY) {
+			keyTextVertical.text = "WS";
+			keyTextHorizontal.text = "AD";
+			SetInput (KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		} else if (keyboardType == KeyboardType.AZERTY) {
+			keyTextVertical.text = "ZS";
+			keyTextHorizontal.text = "AD";
+			SetInput (KeyCode.A, KeyCode.D, KeyCode.Z, KeyCode.S);
+		} else if (keyboardType == KeyboardType.DVORAK) {
+			keyTextVertical.text = "PU";
+			keyTextHorizontal.text = "EI";
+			SetInput (KeyCode.E, KeyCode.I, KeyCode.P, KeyCode.U);
 		}
 	}
 
+
+	void ChangeText() {
+		keyTextVertical.text = player.up.ToString ().ToUpper () + player.down.ToString ().ToUpper ();
+		keyTextHorizontal.text = player.left.ToString ().ToUpper () + player.right.ToString ().ToUpper ();
+
+		if (didChange) {
+			nextKeyTextVertical.text = (player.up != nextKeys.up ? nextKeys.up.ToString ().ToUpper () : " ") +
+				(player.down != nextKeys.down ? nextKeys.down.ToString ().ToUpper () : " ");
+			nextKeyTextHorizontal.text = (player.left != nextKeys.left ? nextKeys.left.ToString ().ToUpper () : " ") +
+				(player.right != nextKeys.right ? nextKeys.right.ToString ().ToUpper () : " ");
+		} else {
+			nextKeyTextHorizontal.text = "";
+			nextKeyTextVertical.text = "";
+		}
+
+	}
+
+	public void ChangeInput(){
+		if (difficultyLevel < 2) {
+			if (didChangeOnce) {
+				WalkPair vertical, horizontal;
+				int i = Random.Range (0, 2);
+
+				if (i == 0) {
+					vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+
+					if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
+					vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+					
+					nextKeys.up = vertical.positive;
+					nextKeys.down = vertical.negative;
+				} else {
+					horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+
+					if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
+					horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+				
+
+					nextKeys.left = horizontal.negative;
+					nextKeys.right = horizontal.positive;
+				}
+
+			} else {
+				WalkPair vertical, horizontal;
+
+				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+
+
+				if (vertical.negative == player.down && vertical.positive == player.up) //Gives one more chance for changing
+				vertical = mediumBundleVertical [Random.Range (0, mediumBundleVertical.Count)];
+
+				if (horizontal.negative == player.left && horizontal.positive == player.right) //Gives one more chance for changing
+				horizontal = mediumBundleHorizontal [Random.Range (0, mediumBundleHorizontal.Count)];
+			
+
+				nextKeys.up = vertical.positive;
+				nextKeys.down = vertical.negative;
+				nextKeys.left = horizontal.negative;
+				nextKeys.right = horizontal.positive;
+
+				didChangeOnce = true;
+			}
+		} else if (difficultyLevel == 2) {
+			int i = Random.Range (0, 4);
+
+			if (i == 0) {
+				int random = Random.Range (0, keycodes.Count);
+
+				do {
+					random = (random + 1) % keycodes.Count;
+					nextKeys.up = keycodes [random];
+
+				} while (nextKeys.up == player.up || nextKeys.up == player.down
+				         || nextKeys.up == player.left || nextKeys.up == player.right);
+
+			} else if (i == 1) {
+
+				int random = Random.Range (0, keycodes.Count);
+
+				do {
+					random = (random + 1) % keycodes.Count;
+					nextKeys.down = keycodes [random];
+
+				} while (nextKeys.down == player.up || nextKeys.down == player.down
+				         || nextKeys.down == player.left || nextKeys.down == player.right);
+				
+
+			} else if (i == 2) {
+
+				int random = Random.Range (0, keycodes.Count);
+
+				do {
+					random = (random + 1) % keycodes.Count;
+					nextKeys.left = keycodes [random];
+
+				} while (nextKeys.left == player.up || nextKeys.left == player.down
+				         || nextKeys.left == player.left || nextKeys.left == player.right);
+				
+
+			} else if (i == 3) {
+
+				int random = Random.Range (0, keycodes.Count);
+
+				do {
+					random = (random + 1) % keycodes.Count;
+					nextKeys.right = keycodes [random];
+
+				} while (nextKeys.right == player.up || nextKeys.right == player.down
+				         || nextKeys.right == player.left || nextKeys.right == player.right);
+				
+				
+			}
+		} else if (difficultyLevel >= 3) {
+
+			int random = Random.Range (0, keycodes.Count);
+
+			do {
+				random = (random + 1) % keycodes.Count;
+				nextKeys.up = keycodes [random];
+
+			} while (nextKeys.up == player.up || nextKeys.up == player.down
+				|| nextKeys.up == player.left || nextKeys.up == player.right);
+
+
+			random = Random.Range (0, keycodes.Count);
+
+			do {
+				random = (random + 1) % keycodes.Count;
+				nextKeys.down = keycodes [random];
+
+			} while (nextKeys.down == player.up || nextKeys.down == player.down
+				|| nextKeys.down == player.left || nextKeys.down == player.right);
+
+
+			random = Random.Range (0, keycodes.Count);
+
+			do {
+				random = (random + 1) % keycodes.Count;
+				nextKeys.left = keycodes [random];
+
+			} while (nextKeys.left == player.up || nextKeys.left == player.down
+				|| nextKeys.left == player.left || nextKeys.left == player.right);
+
+
+			random = Random.Range (0, keycodes.Count);
+
+			do {
+				random = (random + 1) % keycodes.Count;
+				nextKeys.right = keycodes [random];
+
+			} while (nextKeys.right == player.up || nextKeys.right == player.down
+				|| nextKeys.right == player.left || nextKeys.right == player.right);
+			
+			
+			
+		}
+	}
 
 
 	public void SetInput(KeyCode left, KeyCode right, KeyCode up, KeyCode down) {
@@ -213,6 +304,35 @@ public class ControllerRandomizer : MonoBehaviour {
 		player.down = down;
 		player.left = left;
 		player.right = right;
+
+		if (ChangedInputEvent != null)
+			ChangedInputEvent ();
+	}
+
+
+	public void ManageDificulties() {
+
+		if (difficultyLevel == 0) {
+			if (Time.timeSinceLevelLoad >= timeBetweenDificulties) {
+				changeInSeconds = changeInSeconds_hard;
+				AudioManager audio = GameObject.FindGameObjectWithTag ("AudioManager").GetComponent<AudioManager> ();
+				audio.activateChange = true;
+				difficultyLevel = 1;
+			}
+		} else if (difficultyLevel == 1) {
+			if (Time.timeSinceLevelLoad >= 2 * timeBetweenDificulties) {
+				changeInSeconds = tellNextSecondsBefore + 1;
+				difficultyLevel = 2;
+			}
+		} else if (difficultyLevel == 2) {
+			if (Time.timeSinceLevelLoad >= 3 * timeBetweenDificulties) {
+				difficultyLevel = 3;
+			}
+		} else if (difficultyLevel == 3) {
+			if (Time.timeSinceLevelLoad >= 4 * timeBetweenDificulties) {
+				difficultyLevel = 4;
+			}
+		}
 	}
 
 	public void SetBundles() {
@@ -382,6 +502,32 @@ public class ControllerRandomizer : MonoBehaviour {
 			mediumBundleVertical.Add (pair);
 		}
 
+		keycodes.Add (KeyCode.Q);
+		keycodes.Add (KeyCode.W);
+		keycodes.Add (KeyCode.E);
+		keycodes.Add (KeyCode.R);
+		keycodes.Add (KeyCode.T);
+		keycodes.Add (KeyCode.Y);
+		keycodes.Add (KeyCode.U);
+		keycodes.Add (KeyCode.I);
+		keycodes.Add (KeyCode.O);
+		keycodes.Add (KeyCode.P);
+		keycodes.Add (KeyCode.A);
+		keycodes.Add (KeyCode.S);
+		keycodes.Add (KeyCode.D);
+		keycodes.Add (KeyCode.F);
+		keycodes.Add (KeyCode.G);
+		keycodes.Add (KeyCode.H);
+		keycodes.Add (KeyCode.J);
+		keycodes.Add (KeyCode.K);
+		keycodes.Add (KeyCode.L);
+		keycodes.Add (KeyCode.Z);
+		keycodes.Add (KeyCode.X);
+		keycodes.Add (KeyCode.C);
+		keycodes.Add (KeyCode.V);
+		keycodes.Add (KeyCode.B);
+		keycodes.Add (KeyCode.N);
+		keycodes.Add (KeyCode.M);
 	}
 
 

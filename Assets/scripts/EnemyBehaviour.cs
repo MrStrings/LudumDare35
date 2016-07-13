@@ -177,8 +177,12 @@ public class EnemyBehaviour : MonoBehaviour {
 
 
 		if (timeOutOfView >= timeOutsideViewForDestruction) {
-			FindObjectOfType<AreaSpawner> ().enemiesAlive--;
-			Destroy (gameObject);
+			AreaSpawner spawner = FindObjectOfType<AreaSpawner> ();
+			if (spawner) {
+				spawner.enemiesAlive--;
+			}
+			if (gameObject)
+				Destroy (gameObject);
 		}
 	}
 
